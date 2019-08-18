@@ -11,7 +11,7 @@ struct Node_SQ
 {
 	int info;
 	Node_SQ *link;
-}
+};
 
 // 2.1 khai bao cau truc cay nhi phan tim kiem
 struct Node
@@ -93,22 +93,30 @@ void tree_Empty ()
 // 2.3 them 1 phan tu vao cay - khong dung de quy
 void insertNode (Node *&p, int x)
 {
-	
-	while (p->info != x)
+	if (p == NULL) // nếu node đó rỗng
 	{
-		if (p == NULL)
+		p = new Node;
+		p->info = x;
+		p->left = NULL;
+		p->right = NULL;
+	}
+	else
+	{
+		if (p->info == x)
+			return;
+		else
 		{
-			p = new Node;
-			p ->info = x;
-			p ->left = NULL;
+			while (p != NULL)
+			{
+				if (x > p->info)
+					p = p->right;
+				if (x < p->info)
+					p = p->left;
+			}
+			p->info = x;
+			p->left = NULL;
 			p->right = NULL;
 		}
-		if(p->info < x)
-		{
-			p = p->right;
-		}
-		else
-			p = p->left;
 	}
 }
 
@@ -149,18 +157,18 @@ int Delete (Node *&T, int x)
 	if (T-> info == x)
 	{
 		Node *p = T;
-		if(T->left == NULL)
+		if(T->left == NULL) // có 1 con phải
 			T = T->right;
 		else
-			if(T->right == NULL)
+			if(T->right == NULL) // có 1 con bên trái
 				T = T->left;
 			else
-				searchStandFor(p, T->right);
+				searchStandFor(p, T->right); // có 2 con
 		delete p;
 		return 1;
 	}
 	if(T->info < x)
-		return Delete (T->right, x);
+		return Delete(T->right, x);
 	if (T->info > x)
 		return Delete(T->left, x);
 }
@@ -181,8 +189,12 @@ Node_SQ *q;
 // 2.6 duyet nlr - dung stack
 void duyetNLR (Node *p)
 {
-	pushS (root->info);
-
+	if (p != NULL)
+	{
+		cout << p->info << " ";
+		duyetNLR(p->left);
+		duyetNLR(p->right);
+	}
 }
 
 // 2.8 duyet lrn - dung queue
@@ -211,7 +223,7 @@ void Print2DUtil (Node *p, int space)
 		cout << endl;
 		for (int i = COUNT; i< space; i++)
 			cout << "\t";
-		cout << p ->info;
+		cout << p ->info << endl;
 		//process left child
 		Print2DUtil(p->left, space);
 }
@@ -227,7 +239,7 @@ int main ()
 	int x, i;
 	Node *p;
 	system ("cls");
-	cout << "------------BAI TAP 1 CHUONG 4----------------" << endl;
+	cout << "------------BAI TAP 2 CHUONG 4----------------" << endl;
 	cout << "1.Khoi tao cay NPTK rong" << endl;
 	cout << "2.Them phan tu vao cay NPTK" << endl;
 	cout << "3.Them phan tu co gia tri x vao cay NPTK" << endl;
